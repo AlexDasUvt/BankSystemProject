@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "src/Login.h"
 
 struct Account
 {
@@ -25,21 +26,26 @@ void ViewInfo(struct Account Acc) // Change to pass pointer to struct
 int main()
 {
     char editCommand[8];
-    struct Account adminAcc;
-    strcpy(adminAcc.iBan, "AAAADDDD11111111111111111111111111");
-    strcpy(adminAcc.owner, "Alex Dascalu");
-    strcpy(adminAcc.currency, "RON");
-    adminAcc.amount = 12345.67;
-
-    int IsLogged = 15;
-    int loginID = 0; // ID assighned to every account. 0 is False
+    int IsLogged = 0;
+    char name[20];
+    char surname[20];
     int menuAction;
     printf("Welcome to TEST bank interface.\n"); // Work on bank name
     while (IsLogged == 0)
     {
         printf("Please login into your account.\n");
-       // IsLogged = Login(); // Login function. Depending on success of login, returns 0 or 1 TODO
+        printf("Your Name: ");
+        scanf("%s", name);
+        printf("Your Surname: ");
+        scanf("%s", surname);
+        IsLogged = Login(name, surname);
+        if (IsLogged == 0)
+        {
+            printf("Wrong Name or Surname. Please try again!\n");
+        }
+        
     }
+    printf("Successful login.\n");
     while (IsLogged != 0)
     {
         printf("Which action do you want to do (Enter the number o operation)?\n 1. Perform transactions\n 2. Edit account\n 3. View account info\n 4. Delete account\n 5. Logout and Exit\n");
