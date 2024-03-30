@@ -1,3 +1,5 @@
 $ cat .gitignore
 *.exe
 .vscode
+*.csv
+*.txt

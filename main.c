@@ -1,92 +1,99 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "src/Login.h"
+#include "src/Operations.h"
 
-struct Account
+int main(int argc, char *argv[])
 {
-    char iBan[34]; // IBan number consist of 34 alphanumeric characters.
-    char owner[20];
-    char currency[4];
-    double amount;
-};
-
-void EditInfo() // How to pass struct pointer and edit values inside in methods?
-{
-}
-
-void ViewInfo(struct Account Acc) // Change to pass pointer to struct
-{
-    printf("Your account information:\n");
-    printf("Your IBan: %s\n", Acc.iBan);
-    printf("This account is registered on: %s\n", Acc.owner);
-    printf("This account currently has: %.2f %s\n", Acc.amount, Acc.currency);
-}
-
-int main()
-{
-    char editCommand[8];
-    int IsLogged = 0;
-    char name[20];
-    char surname[20];
+    char accountName[20]; // fullname of the account used.
+    char *name;
+    char *surname;
+    char fullname[100];
     int menuAction;
-    printf("Welcome to TEST bank interface.\n"); // Work on bank name
-    while (IsLogged == 0)
+    if (argc != 3)
     {
-        printf("Please login into your account.\n");
-        printf("Your Name: ");
-        scanf("%s", name);
-        printf("Your Surname: ");
-        scanf("%s", surname);
-        IsLogged = Login(name, surname);
-        if (IsLogged == 0)
+        printf("You need to give two arguments!(Name surname)\n");
+        printf("Exiting...");
+        return 1;
+    }
+    name = argv[1];
+    surname = argv[2];
+    strcpy(fullname, name);
+    strcpy(accountName, name);
+    strcat(fullname, surname);
+    strcat(accountName, surname);
+    strcat(fullname, ".csv");
+
+    FILE *csv_file = fopen(fullname, "r");
+    if (csv_file == NULL)
+    {
+        FILE *csv_file = fopen(fullname, "w");
+        if (csv_file == NULL)
         {
-            printf("Wrong Name or Surname. Please try again!\n");
+            printf("Error opening file.\n");
+            return 1;
         }
-        
+        printf("Creating account... \n");
+        fprintf(csv_file, "%s,%s,", name, surname);
+        printf("Write your IBan, currency and amount in specific format! (XXXXXXXX12345678910111213141516171,RON,12345)\n");
+        char details[100];
+        scanf("%s", details);
+        fprintf(csv_file, "%s", details);
     }
     printf("Successful login.\n");
-    while (IsLogged != 0)
+    fclose(csv_file);
+
+    printf("Welcome to TEST bank interface.\n"); // Work on bank name
+    // struct Account ActiveAcc;
+
+    while (accountName != NULL)
     {
-        printf("Which action do you want to do (Enter the number o operation)?\n 1. Perform transactions\n 2. Edit account\n 3. View account info\n 4. Delete account\n 5. Logout and Exit\n");
+        printf("\nWhich action do you want to do? (Enter the number o operation)\n 1. Perform transactions\n 2. Edit account\n 3. View account info\n 4. Delete account\n 5. Logout and Exit\n");
         scanf("%d", &menuAction);
         switch (menuAction)
         {
         case 1:
-            printf("You selected Perform transaction.\n");
-            //PerfTransaction(); // Transaction function. TODO
+            printf("You selected Perform transaction.\n\n");
+            // PerfTransaction(); // Transaction function. TODO
             break;
         case 2:
-            printf("You selected Edit account.\n");
-            //EditInfo(); // Edit account function. TODO
+            printf("You selected Edit account.\n\n");
+            // EditInfo(); // Edit account function. TODO
             break;
         case 3:
-            printf("You selected View account info.\n2");
-            // ViewInfo(); // View Info function. Make it pass loginID and use it.
+            printf("You selected View account info.\n\n");
+            ViewInfo(accountName);
             break;
         case 4:
-            printf("You selected Delete account.\n");
-            printf("WARNING!\n This is irreversible action!\n Do you wish to contionue(1 = Yes/2 = No)? \n");
+            printf("You selected Delete account.\n\n");
+            printf("WARNING!\n This is irreversible action!\n Do you wish to contionue?(1 = Yes/2 = No) ");
             int deleteConf = 2;
             scanf("%d", &deleteConf);
             if (deleteConf == 1)
             {
-                //DeleteAccount(); // Delete account function. TODO
+                // DeleteAccount(); // Delete account function. TODO
             }
             break;
         case 5:
-            printf("You selected Logout and Exit.\n");
-            printf("Logout(1 = Yes/2 = No)? ");
+            printf("You selected Logout and Exit.\n\n");
+            printf("Logout?(1 = Yes/2 = No) ");
             int exitConf = 2;
             scanf("%d", &exitConf);
-            if (exitConf == 1){
+            switch (exitConf)
+            {
+                case 1:
                 printf("Logging out...\n");
                 printf("Exiting...");
                 return 0;
+                break;
+                case 2:
+                printf("Logging canceled\n");
+                default:
+                printf("Unknown command! Logging canceled\n");
             }
             break;
         default:
-            printf("Unknown command! Please try again!\n");
+            printf("Unknown command! Please try again!\n\n");
             break;
         }
     }
