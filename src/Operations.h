@@ -4,6 +4,6 @@
 void PerfTransaction();
 void EditInfo();
 void ViewInfo(char const *accountName);
-void DeleteAccount();
+void DeleteAccount(char const *accountName);
 
 #endif

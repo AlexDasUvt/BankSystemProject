@@ -2,6 +2,11 @@
 
 ## Changelog
 
+01.03.2024:
+Added Delete account function.
+Fixed bug when creating new account, information was not stored in .csv.
+Added explanation comments to different parts of code.
+
 30.03.2024:
 Re-designed login system to use arguments. Discarded use of structures as active account, instead, using .csv files as a way to store and access accounts.
 Re-designed ViewInfo.
