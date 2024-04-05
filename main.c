@@ -5,7 +5,7 @@
 
 int main(int argc, char *argv[])
 {
-    char accountName[20]; // fullname of the account used.
+    char accountName[20]; // fullname of the account used. Used as argument in functions to find account .csv.
     char *name;
     char *surname;
     char fullname[100];
@@ -63,7 +63,7 @@ int main(int argc, char *argv[])
             break;
         case 2:
             printf("You selected Edit account.\n\n");
-            // EditInfo(); // Edit account function. TODO
+            EditInfo(accountName);
             break;
         case 3:
             printf("You selected View account info.\n\n");
@@ -100,9 +100,9 @@ int main(int argc, char *argv[])
                 return 0;
                 break;
                 case 2:
-                printf("Logging canceled\n");
+                printf("Logging out canceled\n");
                 default:
-                printf("Unknown command! Logging canceled\n");
+                printf("Unknown command! Logging out canceled\n");
                 break;
             }          
         default:

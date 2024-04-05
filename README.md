@@ -2,6 +2,10 @@
 
 ## Changelog
 
+05.03.2024:
+Added Edit info function.
+Added free memory to functions.
+
 01.03.2024:
 Added Delete account function.
 Fixed bug when creating new account, information was not stored in .csv.
