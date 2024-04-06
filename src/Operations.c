@@ -1,16 +1,115 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include "Operations.h"
 
-void PerfTransaction();
+#define MAX_LINE_CHARACHTERS 200
+
+void PerfTransaction(char const *accountName, char const *accountName2)
+{
+    /*
+        This function takes owner accountName and recipient accoutName. It reads details lines from both files and stores amount 
+        they have and IBan. After that it prompts user to choose amount to transfer, checking if it won't get owner into negative.
+        Then using original details lines, prints it into re-written files, skipping changed values like amount and inserting new amount.
+    */
+    char fileName[20];
+    strcpy(fileName, accountName);
+    strcat(fileName, ".csv");
+    char fileName2[20];
+    strcpy(fileName2, accountName2);
+    strcat(fileName2, ".csv");
+    char lineOriginal1[200];
+    char lineOriginal2[200];
+    char line1[200];
+    char line2[200];
+    char *token;
+    char IBanSender[40];
+    char IBanRecipient[40];
+    int senderAmount;
+    int recipientAmount;
+
+    FILE *csv_sender = fopen(fileName, "r");
+    FILE *csv_recipient = fopen(fileName2, "r");
+    fgets(lineOriginal1, MAX_LINE_CHARACHTERS, csv_sender);
+    fgets(lineOriginal2, MAX_LINE_CHARACHTERS, csv_recipient);
+    strcpy(line1, lineOriginal1);
+    strcpy(line2, lineOriginal2);
+    token = strtok(line1, ",");
+    token = strtok(NULL, ",");
+    token = strtok(NULL, ",");
+    strcpy(IBanSender, token);
+    token = strtok(NULL, ",");
+    token = strtok(NULL, ",");
+    senderAmount = atoi(token);
+    token = strtok(line2, ",");
+    token = strtok(NULL, ",");
+    token = strtok(NULL, ",");
+    strcpy(IBanRecipient, token);
+    token = strtok(NULL, ",");
+    token = strtok(NULL, ",");
+    recipientAmount = atoi(token);
+    fclose(csv_sender);
+    fclose(csv_recipient);
+
+    if (strcmp(IBanSender, IBanRecipient) == 0) // If Ibans are identical
+    {
+        printf("Identical IBan!\nCanceling transfer...\n\n");
+        return;
+    }
+
+    int transferAmount;
+    printf("What amount do you want to transfer?\n");
+    while (1)
+    {
+        scanf("%d", &transferAmount);
+        if (senderAmount > transferAmount)
+        {
+            break;
+        }
+        printf("ERROR\nYou do not have enough funds to transfer!\nChange amount to transfer:");
+    }
+    char senderAm[10];
+    char recipientAm[10];
+    sprintf(senderAm, "%d", senderAmount -= transferAmount);
+    sprintf(recipientAm, "%d", recipientAmount += transferAmount);
+
+    csv_sender = fopen(fileName, "w");
+    csv_recipient = fopen(fileName2, "w");
+    strcpy(line1, lineOriginal1);
+    strcpy(line2, lineOriginal2);
+    token = strtok(line1, ",");
+    for (int i = 0; i < 4; i++)
+    {
+        char temp[50];
+        strcpy(temp, token);
+        fprintf(csv_sender, "%s,", temp);
+        token = strtok(NULL, ",");
+    }
+    token = strtok(NULL, ",");
+    fprintf(csv_sender, "%s,", senderAm);
+    token = strtok(line2, ",");
+    for (int i = 0; i < 4; i++)
+    {
+        char temp[50];
+        strcpy(temp, token);
+        fprintf(csv_recipient, "%s,", temp);
+        token = strtok(NULL, ",");
+    }
+    token = strtok(NULL, ",");
+    fprintf(csv_recipient, "%s,", recipientAm);
+
+    fclose(csv_sender);
+    fclose(csv_recipient);
+    printf("Transfer successful!\n\n");
+}
 void EditInfo(const char *accountName)
 {
-/*  
-    This function is taking accountName as a parameter. It prompts user to select which value to edit, and saves it in "value".
-    After that it takes whole details line from .csv with account and tokenizes it. It re-writes the file printing each value from "token"
-    until value to be changed is next to be printed. It ends the loop, skips that token and prints instead value from "value".
-    Prints the remaining tokens and closes file.
-*/
+    /*
+        This function is taking accountName as a parameter. It prompts user to select which value to edit, and saves it in "value".
+        After that it takes whole details line from .csv with account and tokenizes it. It re-writes the file printing each value from "token"
+        until value to be changed is next to be printed. It ends the loop, skips that token and prints instead value from "value".
+        Prints the remaining tokens and closes file.
+    */
     char fileName[20];
     char line[200];
     char *token;
@@ -21,7 +120,7 @@ void EditInfo(const char *accountName)
     strcpy(fileName, accountName);
     strcat(fileName, ".csv");
     FILE *csv_file = fopen(fileName, "r");
-    fgets(line, sizeof(line), csv_file);
+    fgets(line, MAX_LINE_CHARACHTERS, csv_file);
     token = strtok(line, ",");
     fclose(csv_file);
 
@@ -47,7 +146,8 @@ void EditInfo(const char *accountName)
         break;
     }
     FILE *csv_file2 = fopen(fileName, "w");
-    for(int i = 0; i < tokenColumn; i++){
+    for (int i = 0; i < tokenColumn; i++)
+    {
         char temp[50];
         strcpy(temp, token);
         token = strtok(NULL, ",");
@@ -64,6 +164,8 @@ void EditInfo(const char *accountName)
     }
     fclose(csv_file);
     free(token);
+    free(csv_file);
+    free(csv_file2);
     printf("Edit successful!\n");
 }
 void ViewInfo(char const *accountName)
@@ -80,7 +182,7 @@ void ViewInfo(char const *accountName)
     strcat(fileName, ".csv");
 
     FILE *csv_file = fopen(fileName, "r");
-    fgets(line, sizeof(line), csv_file);
+    fgets(line, MAX_LINE_CHARACHTERS, csv_file);
     char *token = strtok(line, ",");
     strcpy(reader, token);
     printf("Your name is: %s\n", reader);
@@ -96,8 +198,9 @@ void ViewInfo(char const *accountName)
     token = strtok(NULL, ",");
     strcpy(reader, token);
     printf("Your amount is: %s\n", reader);
-    free(token);
     fclose(csv_file);
+    free(token);
+    free(csv_file);
 }
 void DeleteAccount(char const *accountName)
 {

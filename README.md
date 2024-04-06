@@ -1,6 +1,36 @@
 # BankSystemProject
 
-## Changelog
+## Getting started
+To start, you need to run application using command prompt like: 
+'''
+BankSystem.exe name surname
+'''
+Where "name" and "surname" are your credentials. They are important since every time you will start application, you will use them.
+
+If you enter Name and Surname which don't have corresponding .csv file, you will be prompted to enter your IBan, your currency and your amount.
+If you do have a .csv file, you will instantly skip to the menu.
+
+The menu will look like this:
+
+'''
+Welcome to TEST bank interface.
+
+Which action do you want to do? (Enter the number of operation)
+ 1. Perform transactions
+ 2. Edit account
+ 3. View account info
+ 4. Delete account
+ 5. Logout and Exit
+'''
+In here you can perform actions with your account.
+Whatever action you choose, you will be prompted of whatever is needed from you.
+
+
+### Changelog
+
+06.03.2024:
+Added Perform transaction function and finished main functionalities.
+Some of safeguards were implemented.
 
 05.03.2024:
 Added Edit info function.
