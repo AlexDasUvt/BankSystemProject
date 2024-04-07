@@ -46,16 +46,13 @@ Whatever action you choose, you will be prompted of whatever is needed from you.
 ### Changelog
 
 06.04.2024:
-06.04.2024:
 Added Perform transaction function and finished main functionalities.
 Some of safeguards were implemented.
 
 05.04.2024:
-05.04.2024:
 Added Edit info function.
 Added free memory to functions.
 
-01.04.2024:
 01.04.2024:
 Added Delete account function.
 Fixed bug when creating new account, information was not stored in .csv.
