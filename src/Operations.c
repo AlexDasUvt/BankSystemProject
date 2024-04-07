@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <ctype.h>
 #include <string.h>
 #include "Operations.h"
 
@@ -8,7 +9,7 @@
 void PerfTransaction(char const *accountName, char const *accountName2)
 {
     /*
-        This function takes owner accountName and recipient accoutName. It reads details lines from both files and stores amount 
+        This function takes owner accountName and recipient accoutName. It reads details lines from both files and stores amount
         they have and IBan. After that it prompts user to choose amount to transfer, checking if it won't get owner into negative.
         Then using original details lines, prints it into re-written files, skipping changed values like amount and inserting new amount.
     */
@@ -17,7 +18,6 @@ void PerfTransaction(char const *accountName, char const *accountName2)
     strcat(fileName, ".csv");
     char fileName2[20];
     strcpy(fileName2, accountName2);
-    strcat(fileName2, ".csv");
     char lineOriginal1[200];
     char lineOriginal2[200];
     char line1[200];
@@ -25,13 +25,15 @@ void PerfTransaction(char const *accountName, char const *accountName2)
     char *token;
     char IBanSender[40];
     char IBanRecipient[40];
-    int senderAmount;
-    int recipientAmount;
+    unsigned int senderAmount;
+    unsigned int recipientAmount;
 
     FILE *csv_sender = fopen(fileName, "r");
     FILE *csv_recipient = fopen(fileName2, "r");
     fgets(lineOriginal1, MAX_LINE_CHARACHTERS, csv_sender);
     fgets(lineOriginal2, MAX_LINE_CHARACHTERS, csv_recipient);
+    printf("DEBUG %s\n", lineOriginal1);
+    printf("DEBUG %s\n", lineOriginal2);
     strcpy(line1, lineOriginal1);
     strcpy(line2, lineOriginal2);
     token = strtok(line1, ",");
@@ -53,11 +55,11 @@ void PerfTransaction(char const *accountName, char const *accountName2)
 
     if (strcmp(IBanSender, IBanRecipient) == 0) // If Ibans are identical
     {
-        printf("Identical IBan!\nCanceling transfer...\n\n");
+        printf("Identical IBAN!\nCanceling transfer...\n\n");
         return;
     }
 
-    int transferAmount;
+    unsigned int transferAmount;
     printf("What amount do you want to transfer?\n");
     while (1)
     {
@@ -124,24 +126,44 @@ void EditInfo(const char *accountName)
     token = strtok(line, ",");
     fclose(csv_file);
 
-    printf("Which value do you want to update? (IBan = 1, Currency = 2, Amount = 3)\n");
+    printf("Which value do you want to update? (IBAN = 1, Currency = 2, Balance = 3)\n");
     scanf("%d", &selector);
 
     switch (selector)
     {
     case 1:
         tokenColumn = 2;
-        printf("Please enter your new IBan: ");
-        scanf("%s", value);
+        printf("Please enter your new IBAN: ");
+        while (1)
+        {
+            scanf("%s", value);
+            if (strlen(value) >= 15 && strlen(value) <= 34)
+            {
+                break;
+            }
+            printf("Invalid IBAN lenght! (15-34 characters)\n");
+        }
         break;
     case 2:
         tokenColumn = 3;
         printf("Please enter your new Currency: ");
-        scanf("%s", value);
+        while (1)
+        {
+            scanf("%s", value);
+            for (int i = 0; value[i] != '\0'; i++)
+            {
+                value[i] = toupper(value[i]);
+            }
+            if (strcmp(value, "RON") == 0 || strcmp(value, "USD") == 0 || strcmp(value, "EUR") == 0)
+            {
+                break;
+            }
+            printf("Unsupported currency! (RON, USD, EUR)\n");
+        }
         break;
     case 3:
         tokenColumn = 4;
-        printf("Please enter your new Amount: ");
+        printf("Please enter your new Balance: ");
         scanf("%s", value);
         break;
     }

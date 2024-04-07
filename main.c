@@ -36,18 +36,18 @@ int main(int argc, char *argv[])
         }
         printf("Creating account... \n");
         fprintf(csv_file, "%s,%s,", name, surname);
-        printf("Enter your IBan: ");
+        printf("Enter your IBan (15-34 characters): ");
         char iBan[40];
         while (1)
         {
             scanf("%s", iBan);
-            if (strlen(iBan) >= 34)
+            if (strlen(iBan) >= 15 && strlen(iBan) <= 34)
             {
                 break;
             }
-            printf("IBan is too short! (34 characters)\n");
+            printf("Invalid IBAN lenght! (15-34 characters)\n");
         }
-        printf("Enter your currency: ");
+        printf("Enter your currency (RON, USD, EUR): ");
         char currency[5];
         while (1)
         {
@@ -62,13 +62,11 @@ int main(int argc, char *argv[])
             }
             printf("Unsupported currency! (RON, USD, EUR)\n");
         }
-        printf("Enter your amount: ");
+        printf("Enter your balance: ");
         int amount;
-        char amountS[20];
         scanf("%d", amount);
-        sprintf(amountS, "%d", amount);
 
-        fprintf(csv_file, "%s,%s,%s,", iBan, currency, amountS);
+        fprintf(csv_file, "%s,%s,%s,", iBan, currency, amount);
         fclose(csv_file);
     }
     else
@@ -92,30 +90,31 @@ int main(int argc, char *argv[])
             printf("You selected Perform transaction.\n\n");
             char tName[15];
             char tSurname[15];
-            while (1)
-            {
-                int selector;
-                printf("To which account you wish to transfer funds? (Name Surname)\n");
-                scanf("%s %s", tName, tSurname);
-                printf("Do you want to transfer funds to %s %s? (1 = Yes, 2 = No) ", tName, tSurname);
-                scanf("%d", &selector);
-                if (selector == 1)
+            int selector;
+            printf("To which account you wish to transfer funds? (Name Surname)\n");
+            scanf("%s %s", tName, tSurname);
+            printf("Do you want to transfer funds to %s %s? (1 = Yes, 2 = No) ", tName, tSurname);
+            scanf("%d", &selector);
+            if (selector == 1)
+            {   
+                char accountName2[20];
+                strcpy(accountName2, tName);
+                strcat(accountName2, tSurname);
+                strcat(accountName2, ".csv");
+                FILE *check = fopen(accountName2, "r");
+                if (check != NULL)
                 {
-                    strcat(tName, tSurname);
-                    strcat(tName, ".csv");
-                    FILE *check = fopen(tName, "r");
-                    if (check != NULL)
-                    {
-                        fclose(check);
-                        break;
-                    }
-                    else
-                    {
-                        printf("Cannot find recipient! Please re-enter Name and Surname of recipient:\n");
-                    }
+                    fclose(check);
+                    PerfTransaction(accountName, accountName2);
+                    break;
+                }
+                else
+                {
+                    fclose(check);
+                    printf("Cannot find recipient! Returning to menu...\n");
+                    break;
                 }
             }
-            PerfTransaction(accountName, strcat(tName, tSurname));
             break;
         case 2:
             printf("You selected Edit account.\n\n");
