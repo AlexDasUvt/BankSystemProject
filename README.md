@@ -13,16 +13,11 @@ It can:
 
 ## Getting started
 To start, you need to run application using command prompt: 
-To start, you need to run application using command prompt: 
 
-`BankSystem.exe {name} {surname}`
 `BankSystem.exe {name} {surname}`
 
 Where *{name}* and *{surname}* are your credentials. They are important since every time you will start application, you will use them.
-Where *{name}* and *{surname}* are your credentials. They are important since every time you will start application, you will use them.
 
-If you enter Name and Surname which don't have corresponding .csv file, you will be prompted to enter your IBan, your currency and your balance.
-If you do have a .csv file with corresponding name+surname, you will instantly login and skip to the menu.
 If you enter Name and Surname which don't have corresponding .csv file, you will be prompted to enter your IBan, your currency and your balance.
 If you do have a .csv file with corresponding name+surname, you will instantly login and skip to the menu.
 
@@ -38,7 +33,6 @@ Which action do you want to do? (Enter the number of operation)
 4. Delete account
 5. Logout and Exit
 ~~~
-Here you can perform actions with your account.
 Here you can perform actions with your account.
 Whatever action you choose, you will be prompted of whatever is needed from you.
 
