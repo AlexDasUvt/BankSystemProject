@@ -1,3 +1,4 @@
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
@@ -32,8 +33,6 @@ void PerfTransaction(char const *accountName, char const *accountName2)
     FILE *csv_recipient = fopen(fileName2, "r");
     fgets(lineOriginal1, MAX_LINE_CHARACHTERS, csv_sender);
     fgets(lineOriginal2, MAX_LINE_CHARACHTERS, csv_recipient);
-    printf("DEBUG %s\n", lineOriginal1);
-    printf("DEBUG %s\n", lineOriginal2);
     strcpy(line1, lineOriginal1);
     strcpy(line2, lineOriginal2);
     token = strtok(line1, ",");
